@@ -1,5 +1,5 @@
 import tkinter as Tk
-from tkinter import Button, Entry, Frame, Label, StringVar, Toplevel, messagebox, Tk, Radiobutton
+from tkinter import Button, Entry, Frame, Label, StringVar, Toplevel, messagebox, Tk, Radiobutton, LabelFrame
 from tkinter.ttk import Treeview
 
 clientes = [["Franco Avendaño", 4, "Con Reserva"], ["Logan", 2, "Sin Reserva"]]
@@ -7,10 +7,11 @@ raiz = Tk()
 raiz.title("Reservaciones")
 raiz.resizable(0,0)
 raiz.geometry("600x400")
+raiz.configure(bg="lightblue")
 
-opciones_frame = Frame(raiz)
+opciones_frame = LabelFrame(raiz, text="Opciones", bg="lavender")
 opciones_frame.pack()
-listado_frame = Frame(raiz)
+listado_frame = LabelFrame(raiz, text="Clientes", bg="lavender")
 listado_frame.pack()
 
 def agregar_reservacion():
@@ -44,23 +45,24 @@ def agregar_reservacion():
     modal.geometry("300x250")
     modal.grab_set()
     modal.protocol("WM_DELETE_WINDOW", lambda: None)
+    modal.configure(bg="lavender")
     
     
     
-    label_nombre = Label(modal,text="Nombre:")
-    label_nombre.grid(column=0,row=0, ipady=10)
+    label_nombre = Label(modal,text="Nombre:", bg="lavender", font=("Arial", 10, "bold"))
+    label_nombre.grid(column=0,row=0,ipady=10)
     
     nombre = Entry(modal)
     nombre.grid(column=1,row=0)
     
-    label_personas = Label(modal,text="Cantidad de Personas")
+    label_personas = Label(modal,text="Cantidad de Personas", bg="lavender", font=("Arial", 10, "bold"))
     label_personas.grid(column=0,row=1,ipady=10)
     
     cantidad_personas = Entry(modal)
     cantidad_personas.grid(column=1,row=1)
     
     
-    selecionar_opcion = Label(modal, text="Seleccione una Opcion")
+    selecionar_opcion = Label(modal, text="Seleccione una Opcion", bg="lavender", font=("Arial", 10, "bold"))
     selecionar_opcion.grid(column=0, row=2,ipady=10)
     
     # Variable para almacenar la opción seleccionada
@@ -71,10 +73,10 @@ def agregar_reservacion():
         opciones_reserva.grid(column=1,row=i+2)
         
     
-    boton_modal_cancelar = Button(modal,text="Cancelar", command=modal.destroy,width=15)
+    boton_modal_cancelar = Button(modal,text="Cancelar", bg="lavender", command=modal.destroy,width=15)
     boton_modal_cancelar.grid(column=0,row=5,pady=25,padx=20)
     
-    boton_modal_aceptar = Button(modal, text="Aceptar", command=aceptar_modal,width=15)
+    boton_modal_aceptar = Button(modal, text="Aceptar", bg="lavender", command=aceptar_modal,width=15)
     boton_modal_aceptar.grid(column=1,row=5,pady=25)
     
 
@@ -110,7 +112,39 @@ def atender_cliente():
         messagebox.showinfo("Sin clientes","No hay clientes en la lista de espera.")
 
 def buscar_reservacion():
-    pass
+    def realizar_busqueda():
+        nombre_buscar = nombre_entry.get()
+        if not nombre_buscar:
+            messagebox.showwarning("Advertencia", "Por favor, ingresa un nombre para buscar.")
+            return
+
+        # Buscar el cliente en la lista de clientes
+        resultados = [cliente for cliente in clientes if cliente[0].lower() == nombre_buscar.lower()]
+        if resultados:
+            cliente = resultados[0]
+            messagebox.showinfo("Reservación encontrada", f"Nombre: {cliente[0]}\nPersonas: {cliente[1]}\nTipo: {cliente[2]}")
+        else:
+            messagebox.showinfo("Sin resultados", "No se encontró una reservación con ese nombre.")
+
+        buscar_modal.destroy()
+    buscar_modal = Toplevel(opciones_frame)
+    buscar_modal.title("Buscar Reservación")
+    buscar_modal.resizable(0, 0)
+    buscar_modal.geometry("300x150")
+    buscar_modal.grab_set()
+    buscar_modal.configure(bg="lavender")
+
+    label_nombre = Label(buscar_modal, text="Nombre:", bg="lavender", font=("Arial", 10, "bold"))
+    label_nombre.pack(pady=10)
+    
+    nombre_entry = Entry(buscar_modal)
+    nombre_entry.pack(pady=5)
+    
+    boton_buscar = Button(buscar_modal, text="Buscar", bg="lavender", command=realizar_busqueda)
+    boton_buscar.pack(pady=10)
+
+    boton_cancelar = Button(buscar_modal, text="Cancelar", bg="lavender", command=buscar_modal.destroy)
+    boton_cancelar.pack()
 
 def cancelar_reservacion():
     pass
@@ -120,15 +154,15 @@ def modificar_reservacion():
 
 
 # UI PRINCIPAL
-boton_agregar = Button(opciones_frame,text="Agregar Reservacion", command=agregar_reservacion)
+boton_agregar = Button(opciones_frame,text="Agregar Reservacion", bg="lavender", font=("Arial", 10, "bold"), command=agregar_reservacion)
 boton_agregar.grid(column=0,row=0)
 #boton_agregar.pack(pady=10)
 
-boton_atender = Button(opciones_frame,text="Atender Cliente", command=atender_cliente)
+boton_atender = Button(opciones_frame,text="Atender Cliente", bg="lavender", font=("Arial", 10, "bold"), command=atender_cliente)
 boton_atender.grid(column=1,row=0)
 #boton_atender.pack(pady=10)
 
-boton_buscar = Button(opciones_frame,text="Buscar Reservacion")
+boton_buscar = Button(opciones_frame,text="Buscar Reservacion", bg="lavender", font=("Arial", 10, "bold"), command=buscar_reservacion)
 boton_buscar.grid(column=2,row=0)
 #boton_buscar.pack(pady=10)
 
