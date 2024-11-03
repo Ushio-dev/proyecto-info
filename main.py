@@ -14,6 +14,39 @@ opciones_frame.pack()
 listado_frame = LabelFrame(raiz, text="Clientes", bg="lavender")
 listado_frame.pack()
 
+mesas = [
+    {"id": 1, "capacidad": 2, "ocupado": False},
+    {"id": 2, "capacidad": 2, "ocupado": False},
+    {"id": 3, "capacidad": 2, "ocupado": False},
+    {"id": 4, "capacidad": 3, "ocupado": False},
+    {"id": 5, "capacidad": 3, "ocupado": False},
+    {"id": 6, "capacidad": 3, "ocupado": False},
+    {"id": 7, "capacidad": 4, "ocupado": False},
+    {"id": 8, "capacidad": 4, "ocupado": False},
+    {"id": 9, "capacidad": 4, "ocupado": False},
+    {"id": 10, "capacidad": 5, "ocupado": False},
+    {"id": 11, "capacidad": 5, "ocupado": False},
+    {"id": 12, "capacidad": 5, "ocupado": False},
+]
+
+mesas_frame = LabelFrame(raiz, text="Mesas", bg="lavender")
+mesas_frame.pack(fill='both', expand=True)
+
+def crear_grilla_mesas():
+    columnas = 4
+    for i, mesa in enumerate(mesas):
+        color = "green" if not mesa["ocupado"] else "red"
+        etiqueta_mesa = Label(mesas_frame, text=f"Mesa {mesa["id"]}", bg=color, width=15)
+        etiqueta_mesa.grid(row=i//columnas, column=i%columnas, padx=5, pady=5, sticky="nsew")
+    for columna in range(columnas): mesas_frame.columnconfigure(columna, weight=1)
+
+crear_grilla_mesas()
+
+def actualizar_grilla_mesas():
+    for boton_mesa in mesas_frame.winfo_children():
+        boton_mesa.destroy()
+    crear_grilla_mesas()
+
 def agregar_reservacion():
     def aceptar_modal():
         valor = nombre.get()
@@ -80,32 +113,18 @@ def agregar_reservacion():
     boton_modal_aceptar.grid(column=1,row=5,pady=25)
     
 
-mesas = [
-    {"id": 1, "capacidad": 2, "ocupado": False},
-    {"id": 2, "capacidad": 2, "ocupado": False},
-    {"id": 3, "capacidad": 2, "ocupado": False},
-    {"id": 4, "capacidad": 3, "ocupado": False},
-    {"id": 5, "capacidad": 3, "ocupado": False},
-    {"id": 6, "capacidad": 3, "ocupado": False},
-    {"id": 7, "capacidad": 4, "ocupado": False},
-    {"id": 8, "capacidad": 4, "ocupado": False},
-    {"id": 9, "capacidad": 4, "ocupado": False},
-    {"id": 10, "capacidad": 5, "ocupado": False},
-    {"id": 11, "capacidad": 5, "ocupado": False},
-    {"id": 12, "capacidad": 5, "ocupado": False},
-]
-
 def atender_cliente():
     if clientes:
         cliente = clientes.pop(0)
         for mesa in mesas:
-            if not mesa["ocupado"] and mesa["capacidad"] >= cliente[1]:
+            if not mesa["ocupado"] and mesa["capacidad"] >= int(cliente[1]):
                 mesa["ocupado"] = True
                 messagebox.showinfo("Mesa asignada",f"Mesa {mesa["id"]} asignada a {cliente[0]}")
                 for usuario in tabla.get_children():
                     if tabla.item(usuario)["values"][0] == cliente[0]:
                         tabla.delete(usuario)
                         break
+                actualizar_grilla_mesas()
                 return
         messagebox.showinfo("Sin mesas","No hay mesas disponibles para el cliente actual.")
     else:
@@ -152,6 +171,10 @@ def cancelar_reservacion():
 def modificar_reservacion():
     pass
 
+def liberar_mesas():
+    for mesa in mesas:
+        mesa["ocupado"] = False
+    actualizar_grilla_mesas()
 
 # UI PRINCIPAL
 boton_agregar = Button(opciones_frame,text="Agregar Reservacion", bg="lavender", font=("Arial", 10, "bold"), command=agregar_reservacion)
@@ -166,6 +189,8 @@ boton_buscar = Button(opciones_frame,text="Buscar Reservacion", bg="lavender", f
 boton_buscar.grid(column=2,row=0)
 #boton_buscar.pack(pady=10)
 
+boton_liberarmesas = Button(opciones_frame, text="Liberar Mesas", bg="lavender", font=("Arial", 10, "bold"), command=liberar_mesas)
+boton_liberarmesas.grid(column=3,row=0)
 
 tabla = Treeview(listado_frame,columns=('Nombre', 'Cantidad Clientes', 'Tipo Reserva'),show='headings')
 tabla.heading('Nombre', text="Nombre")
