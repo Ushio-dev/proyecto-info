@@ -19,9 +19,21 @@ def agregar_reservacion():
         print(opcion.get())
         if valor:
             nuevoCliente = [nombre.get(), cantidad_personas.get(), opcion.get()]
-            clientes.append(nuevoCliente)
-            messagebox.showinfo("Valor ingresado", "La reservacion se realizo con exito")
+            
+            if nuevoCliente[2] == "Con Reserva":
+                i = 0
+                while i < len(clientes) and clientes[i][2] == "Con Reserva":
+                    i +=1
+                    
+                clientes.insert(i, nuevoCliente)
+                tabla.insert(parent='',index=i,values=(nuevoCliente[0],nuevoCliente[1],nuevoCliente[2]))
+            else:
+                clientes.append(nuevoCliente)
+                tabla.insert(parent='',index="end",values=(nuevoCliente[0],nuevoCliente[1],nuevoCliente[2]))
+
             modal.destroy()
+            messagebox.showinfo("Valor ingresado", "La reservacion se realizo con exito")
+            
         else:
             messagebox.showinfo("Advertencia", "Por favor ingresa un valor.")
         
@@ -29,27 +41,27 @@ def agregar_reservacion():
     modal = Toplevel(opciones_frame)
     modal.title("Agregar Reservacion")
     modal.resizable(0,0)
-    modal.geometry("300x200")
+    modal.geometry("300x250")
     modal.grab_set()
     modal.protocol("WM_DELETE_WINDOW", lambda: None)
     
     
     
     label_nombre = Label(modal,text="Nombre:")
-    label_nombre.grid(column=0,row=0)
+    label_nombre.grid(column=0,row=0, ipady=10)
     
     nombre = Entry(modal)
     nombre.grid(column=1,row=0)
     
     label_personas = Label(modal,text="Cantidad de Personas")
-    label_personas.grid(column=0,row=1)
+    label_personas.grid(column=0,row=1,ipady=10)
     
     cantidad_personas = Entry(modal)
     cantidad_personas.grid(column=1,row=1)
     
     
     selecionar_opcion = Label(modal, text="Seleccione una Opcion")
-    selecionar_opcion.grid(column=0, row=2)
+    selecionar_opcion.grid(column=0, row=2,ipady=10)
     
     # Variable para almacenar la opción seleccionada
     opcion = StringVar(value="")  # Valor inicial vacío
@@ -59,11 +71,11 @@ def agregar_reservacion():
         opciones_reserva.grid(column=1,row=i+2)
         
     
-    boton_modal_cancelar = Button(modal,text="Cancelar", command=modal.destroy)
-    boton_modal_cancelar.grid(column=0,row=5)
+    boton_modal_cancelar = Button(modal,text="Cancelar", command=modal.destroy,width=15)
+    boton_modal_cancelar.grid(column=0,row=5,pady=25,padx=20)
     
-    boton_modal_aceptar = Button(modal, text="Aceptar", command=aceptar_modal)
-    boton_modal_aceptar.grid(column=1,row=5)
+    boton_modal_aceptar = Button(modal, text="Aceptar", command=aceptar_modal,width=15)
+    boton_modal_aceptar.grid(column=1,row=5,pady=25)
     
 
 mesas = [
