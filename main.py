@@ -66,8 +66,36 @@ def agregar_reservacion():
     boton_modal_aceptar.grid(column=1,row=5)
     
 
+mesas = [
+    {"id": 1, "capacidad": 2, "ocupado": False},
+    {"id": 2, "capacidad": 2, "ocupado": False},
+    {"id": 3, "capacidad": 2, "ocupado": False},
+    {"id": 4, "capacidad": 3, "ocupado": False},
+    {"id": 5, "capacidad": 3, "ocupado": False},
+    {"id": 6, "capacidad": 3, "ocupado": False},
+    {"id": 7, "capacidad": 4, "ocupado": False},
+    {"id": 8, "capacidad": 4, "ocupado": False},
+    {"id": 9, "capacidad": 4, "ocupado": False},
+    {"id": 10, "capacidad": 5, "ocupado": False},
+    {"id": 11, "capacidad": 5, "ocupado": False},
+    {"id": 12, "capacidad": 5, "ocupado": False},
+]
+
 def atender_cliente():
-    pass
+    if clientes:
+        cliente = clientes.pop(0)
+        for mesa in mesas:
+            if not mesa["ocupado"] and mesa["capacidad"] >= cliente[1]:
+                mesa["ocupado"] = True
+                messagebox.showinfo("Mesa asignada",f"Mesa {mesa["id"]} asignada a {cliente[0]}")
+                for usuario in tabla.get_children():
+                    if tabla.item(usuario)["values"][0] == cliente[0]:
+                        tabla.delete(usuario)
+                        break
+                return
+        messagebox.showinfo("Sin mesas","No hay mesas disponibles para el cliente actual.")
+    else:
+        messagebox.showinfo("Sin clientes","No hay clientes en la lista de espera.")
 
 def buscar_reservacion():
     pass
@@ -79,13 +107,12 @@ def modificar_reservacion():
     pass
 
 
-
 # UI PRINCIPAL
 boton_agregar = Button(opciones_frame,text="Agregar Reservacion", command=agregar_reservacion)
 boton_agregar.grid(column=0,row=0)
 #boton_agregar.pack(pady=10)
 
-boton_atender = Button(opciones_frame,text="Atender Cliente")
+boton_atender = Button(opciones_frame,text="Atender Cliente", command=atender_cliente)
 boton_atender.grid(column=1,row=0)
 #boton_atender.pack(pady=10)
 
