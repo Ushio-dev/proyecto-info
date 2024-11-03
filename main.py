@@ -49,10 +49,11 @@ def actualizar_grilla_mesas():
 
 def agregar_reservacion():
     def aceptar_modal():
-        valor = nombre.get()
-        print(opcion.get())
-        if valor:
-            nuevoCliente = [nombre.get(), cantidad_personas.get(), opcion.get()]
+        nombre_entry = nombre.get()
+        cantidad_entry = int(cantidad_personas.get())
+        opcion_entry = opcion.get()
+        if nombre_entry and cantidad_entry and opcion_entry:
+            nuevoCliente = [nombre_entry, cantidad_entry, opcion_entry]
             
             if nuevoCliente[2] == "Con Reserva":
                 i = 0
