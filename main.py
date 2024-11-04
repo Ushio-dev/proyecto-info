@@ -7,7 +7,7 @@ clientes = [["Franco Avendaño", 4, "Con Reserva"], ["Logan", 2, "Sin Reserva"]]
 raiz = Tk()
 raiz.title("Reservaciones")
 raiz.resizable(0,0)
-raiz.geometry("600x400")
+raiz.geometry("750x400")
 raiz.configure(bg="lightblue")
 
 tiempo = Label(raiz)
@@ -46,7 +46,7 @@ def crear_grilla_mesas():
     columnas = 4
     for i, mesa in enumerate(mesas):
         color = "forestgreen" if not mesa["ocupado"] else "red3"
-        etiqueta_mesa = Label(mesas_frame, text=f"Mesa {mesa["id"]}", bg=color, width=15)
+        etiqueta_mesa = Label(mesas_frame, text=f"Mesa {mesa['id']}", bg=color, width=15)
         etiqueta_mesa.grid(row=i//columnas, column=i%columnas, padx=5, pady=5, sticky="nsew")
     for columna in range(columnas): mesas_frame.columnconfigure(columna, weight=1)
 
@@ -130,7 +130,7 @@ def atender_cliente():
         for mesa in mesas:
             if not mesa["ocupado"] and mesa["capacidad"] >= int(cliente[1]):
                 mesa["ocupado"] = True
-                messagebox.showinfo("Mesa asignada",f"Mesa {mesa["id"]} asignada a {cliente[0]}")
+                messagebox.showinfo("Mesa asignada",f"Mesa {mesa['id']} asignada a {cliente[0]}")
                 for usuario in tabla.get_children():
                     if tabla.item(usuario)["values"][0] == cliente[0]:
                         tabla.delete(usuario)
@@ -180,7 +180,66 @@ def cancelar_reservacion():
     pass
 
 def modificar_reservacion():
-    pass
+    #Seleciona la fila que desea cambiar
+    seleccion = tabla.selection()
+    if not seleccion:
+        messagebox.showwarning("Advertencia", "Por favor, selecciona una reservación para modificar.")
+        return
+
+    item_id = seleccion[0]
+    index = tabla.index(item_id)
+    cliente = clientes[index]
+
+    def aceptar_cambios():
+        nuevo_nombre = nombre_entry.get()
+        try:
+            nueva_cantidad = int(cantidad_personas_entry.get())
+            if nueva_cantidad <= 0:
+                raise ValueError
+            if nueva_cantidad > 5:
+                raise ValueError
+        except ValueError:
+            messagebox.showerror("Error", "Cantidad de personas debe ser un número positivo y menor de 5 personas.")
+            return
+
+        nuevo_tipo_reserva = opcion.get()
+
+        if nuevo_nombre and nuevo_tipo_reserva:
+            clientes[index] = [nuevo_nombre, nueva_cantidad, nuevo_tipo_reserva]
+            tabla.delete(*tabla.get_children())
+            for cliente in clientes:
+                tabla.insert(parent='', index="end", values=(cliente[0], cliente[1], cliente[2]))
+            messagebox.showinfo("Modificación Exitosa", "La reservación se modificó correctamente.")
+            modificar.destroy()
+        else:
+            messagebox.showwarning("Advertencia", "Por favor, ingresa todos los valores.")
+
+    modificar = Toplevel(raiz)
+    modificar.title("Modificar Reservación")
+    modificar.resizable(0,0)
+    modificar.geometry("300x250")
+    modificar.grab_set()
+    modificar.configure(bg="lavender")
+
+    Label(modificar, text="Nombre:",bg="lavender", font=("Arial", 10, "bold")).grid(column=0, row=0,ipady=10)
+    nombre_entry = Entry(modificar)
+    nombre_entry.grid(column=1, row=0)
+    nombre_entry.insert(0, cliente[0])
+
+    Label(modificar, text="Cantidad de Personas:", bg="lavender", font=("Arial", 10, "bold")).grid(column=0, row=1,ipady=10)
+    cantidad_personas_entry = Entry(modificar)
+    cantidad_personas_entry.grid(column=1, row=1)
+    cantidad_personas_entry.insert(0, cliente[1])
+
+    Label(modificar, text="Tipo de Reserva:", bg="lavender", font=("Arial", 10, "bold")).grid(column=0, row=2,ipady=10)
+    opcion = StringVar(value=cliente[2])
+    opciones = ["Con Reserva", "Sin Reserva"]
+    for i, texto in enumerate(opciones):
+        Radiobutton(modificar, text=texto, variable=opcion, value=texto).grid(column=1, row=i+2)
+
+    Button(modificar, text="Cancelar", bg="lavender", command=modificar.destroy,width=15).grid(column=0, row=5,pady=25,padx=20)
+    Button(modificar, text="Aceptar", bg="lavender", command=aceptar_cambios,width=15).grid(column=1, row=5,pady=25)
+
 
 def liberar_mesas():
     for mesa in mesas:
@@ -202,6 +261,9 @@ boton_buscar.grid(column=2,row=0)
 
 boton_liberarmesas = Button(opciones_frame, text="Liberar Mesas", bg="lavender", font=("Arial", 10, "bold"), command=liberar_mesas)
 boton_liberarmesas.grid(column=3,row=0)
+
+boton_modificar = Button(opciones_frame, text="Modificar Reservación", bg="lavender", font=("Arial", 10, "bold"), command=modificar_reservacion)
+boton_modificar.grid(column=4, row=0)
 
 tabla = Treeview(listado_frame,columns=('Nombre', 'Cantidad Clientes', 'Tipo Reserva'),show='headings')
 tabla.heading('Nombre', text="Nombre")
