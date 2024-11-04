@@ -192,27 +192,47 @@ def modificar_reservacion():
 
     def aceptar_cambios():
         nuevo_nombre = nombre_entry.get()
-        try:
-            nueva_cantidad = int(cantidad_personas_entry.get())
-            if nueva_cantidad <= 0:
-                raise ValueError
-            if nueva_cantidad > 5:
-                raise ValueError
-        except ValueError:
-            messagebox.showerror("Error", "Cantidad de personas debe ser un número positivo y menor de 5 personas.")
+        nueva_cantidad = int(cantidad_personas_entry.get())
+        if nueva_cantidad <= 0:
+            messagebox.showerror("Error", "Cantidad de personas debe ser mayor que cero")
+            return
+        if nueva_cantidad > 5:
+            messagebox.showerror("Error", "Cantidad de personas debe ser un menor de 5 personas.")
             return
 
         nuevo_tipo_reserva = opcion.get()
 
         if nuevo_nombre and nuevo_tipo_reserva:
-            clientes[index] = [nuevo_nombre, nueva_cantidad, nuevo_tipo_reserva]
+            
+            cliente_anterior = clientes[index]
+            tipo_reserva_anterior = cliente_anterior[2]
+        
+            
+            cliente_actualizado = [nuevo_nombre, nueva_cantidad, nuevo_tipo_reserva]
+        
+            
+            if tipo_reserva_anterior == "Con Reserva" and nuevo_tipo_reserva == "Sin Reserva":
+                
+                clientes.pop(index)
+                
+                clientes.append(cliente_actualizado)
+            elif tipo_reserva_anterior == "Sin Reserva" and nuevo_tipo_reserva == "Con Reserva":
+                
+                clientes.pop(index)
+                
+                clientes.insert(0, cliente_actualizado)
+            else:
+                
+                clientes[index] = cliente_actualizado
+
+            # Actualizar la tabla para reflejar los cambios
             tabla.delete(*tabla.get_children())
             for cliente in clientes:
                 tabla.insert(parent='', index="end", values=(cliente[0], cliente[1], cliente[2]))
             messagebox.showinfo("Modificación Exitosa", "La reservación se modificó correctamente.")
             modificar.destroy()
         else:
-            messagebox.showwarning("Advertencia", "Por favor, ingresa todos los valores.")
+             messagebox.showwarning("Advertencia", "Por favor, ingresa todos los valores.")
 
     modificar = Toplevel(raiz)
     modificar.title("Modificar Reservación")
