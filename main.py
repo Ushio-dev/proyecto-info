@@ -1,3 +1,4 @@
+import time
 import tkinter as Tk
 from tkinter import Button, Entry, Frame, Label, StringVar, Toplevel, messagebox, Tk, Radiobutton, LabelFrame
 from tkinter.ttk import Treeview
@@ -8,6 +9,15 @@ raiz.title("Reservaciones")
 raiz.resizable(0,0)
 raiz.geometry("600x400")
 raiz.configure(bg="lightblue")
+
+tiempo = Label(raiz)
+tiempo.pack()
+tiempo.place(x=2, y=15)
+tiempo.configure(bg="lavender", font=("Arial", 8, "bold"))
+
+def actualizar_hora():
+    tiempo.configure(text=time.strftime("%H:%M:%S"))
+    tiempo.after(1000, actualizar_hora)
 
 opciones_frame = LabelFrame(raiz, text="Opciones", bg="lavender")
 opciones_frame.pack()
@@ -35,7 +45,7 @@ mesas_frame.pack(fill='both', expand=True)
 def crear_grilla_mesas():
     columnas = 4
     for i, mesa in enumerate(mesas):
-        color = "green" if not mesa["ocupado"] else "red"
+        color = "forestgreen" if not mesa["ocupado"] else "red3"
         etiqueta_mesa = Label(mesas_frame, text=f"Mesa {mesa["id"]}", bg=color, width=15)
         etiqueta_mesa.grid(row=i//columnas, column=i%columnas, padx=5, pady=5, sticky="nsew")
     for columna in range(columnas): mesas_frame.columnconfigure(columna, weight=1)
@@ -221,4 +231,5 @@ boton_cancelar = Button(text="Cancelar Reservacion", height=2, width=25)
 boton_modificar = Button(text="Modificar Reservacion", height=2, width=25)
 #boton_modificar.pack(pady=10)
 """
+actualizar_hora()
 raiz.mainloop()
