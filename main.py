@@ -203,26 +203,18 @@ def modificar_reservacion():
         nuevo_tipo_reserva = opcion.get()
 
         if nuevo_nombre and nuevo_tipo_reserva:
-            
             cliente_anterior = clientes[index]
             tipo_reserva_anterior = cliente_anterior[2]
         
-            
             cliente_actualizado = [nuevo_nombre, nueva_cantidad, nuevo_tipo_reserva]
         
-            
             if tipo_reserva_anterior == "Con Reserva" and nuevo_tipo_reserva == "Sin Reserva":
-                
                 clientes.pop(index)
-                
                 clientes.append(cliente_actualizado)
             elif tipo_reserva_anterior == "Sin Reserva" and nuevo_tipo_reserva == "Con Reserva":
-                
                 clientes.pop(index)
-                
                 clientes.insert(0, cliente_actualizado)
             else:
-                
                 clientes[index] = cliente_actualizado
 
             # Actualizar la tabla para reflejar los cambios
