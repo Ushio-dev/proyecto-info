@@ -7,7 +7,7 @@ clientes = [["Franco Avendaño", 4, "Con Reserva"], ["Logan", 2, "Sin Reserva"]]
 raiz = Tk()
 raiz.title("Reservaciones")
 raiz.resizable(0,0)
-raiz.geometry("750x400")
+raiz.geometry("800x400")
 raiz.configure(bg="lightblue")
 
 tiempo = Label(raiz)
@@ -260,11 +260,21 @@ def modificar_reservacion():
     Button(modificar, text="Cancelar", bg="lavender", command=modificar.destroy,width=15).grid(column=0, row=5,pady=25,padx=20)
     Button(modificar, text="Aceptar", bg="lavender", command=aceptar_cambios,width=15).grid(column=1, row=5,pady=25)
 
-
 def liberar_mesas():
     for mesa in mesas:
         mesa["ocupado"] = False
     actualizar_grilla_mesas()
+
+def eliminar_cliente():
+    if clientes:
+        cliente = clientes.pop(0)  # Elimina al cliente atendido de la lista
+        messagebox.showinfo("Cliente eliminado", f"Cliente {cliente[0]} eliminado de la lista.")
+        for usuario in tabla.get_children():
+            if tabla.item(usuario)["values"][0] == cliente[0]:
+                tabla.delete(usuario)
+                break
+    else:
+        messagebox.showinfo("Sin clientes", "No hay clientes para eliminar.")
 
 # UI PRINCIPAL
 boton_agregar = Button(opciones_frame,text="Agregar Reservacion", bg="lavender", font=("Arial", 10, "bold"), command=agregar_reservacion)
@@ -282,8 +292,12 @@ boton_buscar.grid(column=2,row=0)
 boton_liberarmesas = Button(opciones_frame, text="Liberar Mesas", bg="lavender", font=("Arial", 10, "bold"), command=liberar_mesas)
 boton_liberarmesas.grid(column=3,row=0)
 
+boton_eliminar = Button(opciones_frame, text="Eliminar Cliente", bg="lavender", font=("Arial", 10, "bold"), command=eliminar_cliente)
+boton_eliminar.grid(column=4, row=0)  # Ajusta la columna según sea necesario
+
 boton_modificar = Button(opciones_frame, text="Modificar Reservación", bg="lavender", font=("Arial", 10, "bold"), command=modificar_reservacion)
-boton_modificar.grid(column=4, row=0)
+boton_modificar.grid(column=5, row=0)
+
 
 tabla = Treeview(listado_frame,columns=('Nombre', 'Cantidad Clientes', 'Tipo Reserva'),show='headings')
 tabla.heading('Nombre', text="Nombre")
