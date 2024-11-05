@@ -287,9 +287,9 @@ boton_liberarmesas.grid(column=3,row=0)
 boton_eliminar = Button(opciones_frame, text="Eliminar Cliente", bg="lavender", font=("Arial", 10, "bold"), command=eliminar_cliente)
 boton_eliminar.grid(column=4, row=0)  # Ajusta la columna según sea necesario
 
+
 boton_modificar = Button(opciones_frame, text="Modificar Reservación", bg="lavender", font=("Arial", 10, "bold"), command=modificar_reservacion)
 boton_modificar.grid(column=5, row=0)
-
 
 tabla = Treeview(listado_frame,columns=('Nombre', 'Cantidad Clientes', 'Tipo Reserva'),show='headings')
 tabla.heading('Nombre', text="Nombre")
