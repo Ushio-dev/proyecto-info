@@ -271,15 +271,12 @@ def eliminar_cliente():
 # UI PRINCIPAL
 boton_agregar = Button(opciones_frame,text="Agregar Reservacion", bg="lavender", font=("Arial", 10, "bold"), command=agregar_reservacion)
 boton_agregar.grid(column=0,row=0)
-#boton_agregar.pack(pady=10)
 
 boton_atender = Button(opciones_frame,text="Atender Cliente", bg="lavender", font=("Arial", 10, "bold"), command=atender_cliente)
 boton_atender.grid(column=1,row=0)
-#boton_atender.pack(pady=10)
 
 boton_buscar = Button(opciones_frame,text="Buscar Reservacion", bg="lavender", font=("Arial", 10, "bold"), command=buscar_reservacion)
 boton_buscar.grid(column=2,row=0)
-#boton_buscar.pack(pady=10)
 
 boton_liberarmesas = Button(opciones_frame, text="Liberar Mesas", bg="lavender", font=("Arial", 10, "bold"), command=liberar_mesas)
 boton_liberarmesas.grid(column=3,row=0)
@@ -298,26 +295,7 @@ tabla.heading('Tipo Reserva',text='Tipo Reserva')
 tabla.pack(fill='both',expand=True)
 
 for i in range(len(clientes)):
-    
     tabla.insert(parent='',index="end",values=(clientes[i][0],clientes[i][1],clientes[i][2]))
-"""
-# LISTADO
-fila = 1
-for i, cliente in enumerate(clientes):
-    columna = 0
-    for j, dato in enumerate(cliente):
-        label_cliente = Label(raiz,text=dato)
-        label_cliente.grid(column=columna,row=fila)
-        columna += 1
-    boton_cancelar = Button(text="Cancelar Reservacion")
-    boton_cancelar.grid(column=columna,row=fila)
-    fila += 1
-    
-boton_cancelar = Button(text="Cancelar Reservacion", height=2, width=25)
-#boton_cancelar.pack(pady=10)
 
-boton_modificar = Button(text="Modificar Reservacion", height=2, width=25)
-#boton_modificar.pack(pady=10)
-"""
 actualizar_hora()
 raiz.mainloop()
