@@ -187,6 +187,17 @@ def liberar_mesas():
         mesa["ocupado"] = False
     actualizar_grilla_mesas()
 
+def eliminar_cliente():
+    if clientes:
+        cliente = clientes.pop(0)  # Elimina al cliente atendido de la lista
+        messagebox.showinfo("Cliente eliminado", f"Cliente {cliente[0]} eliminado de la lista.")
+        for usuario in tabla.get_children():
+            if tabla.item(usuario)["values"][0] == cliente[0]:
+                tabla.delete(usuario)
+                break
+    else:
+        messagebox.showinfo("Sin clientes", "No hay clientes para eliminar.")
+
 # UI PRINCIPAL
 boton_agregar = Button(opciones_frame,text="Agregar Reservacion", bg="lavender", font=("Arial", 10, "bold"), command=agregar_reservacion)
 boton_agregar.grid(column=0,row=0)
@@ -202,6 +213,9 @@ boton_buscar.grid(column=2,row=0)
 
 boton_liberarmesas = Button(opciones_frame, text="Liberar Mesas", bg="lavender", font=("Arial", 10, "bold"), command=liberar_mesas)
 boton_liberarmesas.grid(column=3,row=0)
+
+boton_eliminar = Button(opciones_frame, text="Eliminar Cliente", bg="lavender", font=("Arial", 10, "bold"), command=eliminar_cliente)
+boton_eliminar.grid(column=4, row=0)  # Ajusta la columna según sea necesario
 
 tabla = Treeview(listado_frame,columns=('Nombre', 'Cantidad Clientes', 'Tipo Reserva'),show='headings')
 tabla.heading('Nombre', text="Nombre")
