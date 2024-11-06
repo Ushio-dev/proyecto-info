@@ -2,27 +2,40 @@ import time
 import tkinter as Tk
 from tkinter import Button, Entry, Frame, Label, StringVar, Toplevel, messagebox, Tk, Radiobutton, LabelFrame
 from tkinter.ttk import Treeview
+from tkinter import PhotoImage
 
-clientes = [["Franco Avendaño", 4, "Con Reserva"], ["Logan", 2, "Sin Reserva"]]
+clientes = [
+    ["Franco Avendaño", 4, "Con Reserva"], 
+    ["Martín Escobar", 2, "Sin Reserva"],
+    ["Camila Fernández", 3, "Con Reserva"],
+    ["Sofía Domínguez", 5, "Sin Reserva"],
+    ["Florencia Gutiérrez", 4, "Con Reserva"],
+    ["Gonzalo Romero", 3, "Sin Reserva"],
+    ["Lionel Messi", 5, "Con Reserva"],
+    ["Emiliano Torres", 3, "Sin Reserva"]
+    ]
+
 raiz = Tk()
 raiz.title("Reservaciones")
 raiz.resizable(0,0)
-raiz.geometry("800x400")
+raiz.geometry("880x415")
 raiz.configure(bg="lightblue")
 
-tiempo = Label(raiz)
-tiempo.pack()
-tiempo.place(x=2, y=15)
-tiempo.configure(bg="lavender", font=("Arial", 8, "bold"))
+icono = PhotoImage(file="./icono.png")
+raiz.iconphoto(False, icono)
+
+opciones_frame = LabelFrame(raiz, text="Opciones", bg="lavender")
+opciones_frame.pack(fill="both", expand=True)
+listado_frame = LabelFrame(raiz, text="Clientes", bg="lavender")
+listado_frame.pack(fill="both", expand=True)
+
+tiempo = Label(opciones_frame, fg="#B22222")
+tiempo.grid(column=6, row=0, sticky="e", padx=25)
+tiempo.configure(bg="lavender", font=("Arial", 10, "bold"))
 
 def actualizar_hora():
     tiempo.configure(text=time.strftime("%H:%M:%S"))
     tiempo.after(1000, actualizar_hora)
-
-opciones_frame = LabelFrame(raiz, text="Opciones", bg="lavender")
-opciones_frame.pack()
-listado_frame = LabelFrame(raiz, text="Clientes", bg="lavender")
-listado_frame.pack()
 
 mesas = [
     {"id": 1, "capacidad": 2, "ocupado": False},
@@ -284,7 +297,6 @@ boton_liberarmesas.grid(column=3,row=0)
 boton_eliminar = Button(opciones_frame, text="Eliminar Cliente", bg="lavender", font=("Arial", 10, "bold"), command=eliminar_cliente)
 boton_eliminar.grid(column=4, row=0)  # Ajusta la columna según sea necesario
 
-
 boton_modificar = Button(opciones_frame, text="Modificar Reservación", bg="lavender", font=("Arial", 10, "bold"), command=modificar_reservacion)
 boton_modificar.grid(column=5, row=0)
 
@@ -292,7 +304,10 @@ tabla = Treeview(listado_frame,columns=('Nombre', 'Cantidad Clientes', 'Tipo Res
 tabla.heading('Nombre', text="Nombre")
 tabla.heading('Cantidad Clientes',text='Cantidad Clientes')
 tabla.heading('Tipo Reserva',text='Tipo Reserva')
-tabla.pack(fill='both',expand=True)
+tabla.pack(fill="both", expand=True)
+
+tabla.column('Cantidad Clientes', anchor='center')
+tabla.column('Tipo Reserva', anchor='center')
 
 for i in range(len(clientes)):
     tabla.insert(parent='',index="end",values=(clientes[i][0],clientes[i][1],clientes[i][2]))
