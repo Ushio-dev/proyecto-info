@@ -6,12 +6,12 @@ from tkinter import PhotoImage
 
 clientes = [
     ["Franco Avendaño", 4, "Con Reserva"], 
-    ["Martín Escobar", 2, "Sin Reserva"],
     ["Camila Fernández", 3, "Con Reserva"],
-    ["Sofía Domínguez", 5, "Sin Reserva"],
     ["Florencia Gutiérrez", 4, "Con Reserva"],
-    ["Gonzalo Romero", 3, "Sin Reserva"],
     ["Lionel Messi", 5, "Con Reserva"],
+    ["Martín Escobar", 2, "Sin Reserva"],
+    ["Sofía Domínguez", 5, "Sin Reserva"],
+    ["Gonzalo Romero", 3, "Sin Reserva"],
     ["Emiliano Torres", 3, "Sin Reserva"]
     ]
 
